@@ -4,7 +4,7 @@ public class Main {
         Time timeUm = new Time("Grêmio");
         Time timeDois = new Time("BInternacional");
 
-        Campeonato campeonato = new
+        Campeonato campeonato = new Campeonato("Brasileirão");
 
     }
 }

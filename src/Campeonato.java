@@ -3,16 +3,14 @@ import java.util.List;
 
 public class Campeonato {
 
-    
+    private String nomeDoCampeonato;
     private ArrayList<Time> listaDeTimes;
     private ArrayList<Partida> listaDePartidas;
     private Integer totalDePartidas;
 
 
-    public Campeonato(ArrayList<Time> listaDeTimes, ArrayList<Partida> listaDePartidas, Integer totalDePartidas) {
-        this.listaDeTimes = listaDeTimes;
-        this.listaDePartidas = listaDePartidas;
-        this.totalDePartidas = totalDePartidas;
+    public Campeonato(String nomeDoCampeonato) {
+      this.nomeDoCampeonato = nomeDoCampeonato;
     }
 
 
