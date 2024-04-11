@@ -45,6 +45,7 @@ public class Main {
 
                     break;
                 case 2:
+                    //o 4 é o numero minimo de times registrados para prosseguir
                     if (campeonato.getListaDeTimes().size() < 4){
                         System.out.println("\nNumero de times minimo para o campeonato não foi a atingido!");
                         System.out.print("Faltam "+ (4-campeonato.getListaDeTimes().size())+" times para iniciar o campeonato\n");
