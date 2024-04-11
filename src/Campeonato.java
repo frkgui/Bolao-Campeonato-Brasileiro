@@ -1,12 +1,11 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Campeonato {
 
     private String nomeDoCampeonato;
-    private ArrayList<Time> listaDeTimes = new ArrayList<Time>();
-    private ArrayList<Partida> listaDePartidas;
-    private Integer totalDePartidas;
+    private ArrayList<Time> listaDeTimes = new ArrayList<>();
+    private ArrayList<Partida> listaDePartidas = new ArrayList<>();
+    private Integer totalDePartidas = 0;
 
 
     public Campeonato(String nomeDoCampeonato) {

@@ -1,14 +1,24 @@
 public class Partida {
+    private Integer idPartida = 0;
     private Time timeUm;
     private Time timeDois;
     private Integer placarTimeUm;
     private Integer placarTimeDois;
 
-    public Partida(Time timeUm, Time timeDois, Integer placarTimeUm, Integer placarTimeDois) {
+
+    public Partida(Time timeUm, Time timeDois) {
         this.timeUm = timeUm;
         this.timeDois = timeDois;
-        this.placarTimeUm = placarTimeUm;
-        this.placarTimeDois = placarTimeDois;
+        this.idPartida +=1;
+
+    }
+
+    public Integer getIdPartida() {
+        return idPartida;
+    }
+
+    public void setIdPartida(Integer idPartida) {
+        this.idPartida = idPartida;
     }
 
     public Time getTimeUm() {
