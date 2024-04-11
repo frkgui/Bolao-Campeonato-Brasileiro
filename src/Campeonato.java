@@ -4,7 +4,7 @@ import java.util.List;
 public class Campeonato {
 
     private String nomeDoCampeonato;
-    private ArrayList<Time> listaDeTimes;
+    private ArrayList<Time> listaDeTimes = new ArrayList<Time>();
     private ArrayList<Partida> listaDePartidas;
     private Integer totalDePartidas;
 
@@ -43,7 +43,13 @@ public class Campeonato {
 
     }
 
+    // métodos
+
     public void iniciarRodada(ArrayList<Partida> listaDePartidas){
 
+    }
+
+    public void adicionarTime(Time time){
+        this.listaDeTimes.add(time);
     }
 }
