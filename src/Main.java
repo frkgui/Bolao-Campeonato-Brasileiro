@@ -6,7 +6,7 @@ public class Main {
 
 
         System.out.println("""
-                Seja Bem Vindo a Simulação e Bolão de Campeonato de Futebol!
+                Seja Bem Vindo a Simulação e Bolão de Campeonato de Futebol! 
                 
                 """);
         Time timeUm = new Time("Grêmio");
