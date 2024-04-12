@@ -24,6 +24,9 @@ public class Time {
         this.mediaDeGols = 0;
     }
 
+    public Time() {
+    }
+
     public String getNomeDoTime() {
         return nomeDoTime;
     }

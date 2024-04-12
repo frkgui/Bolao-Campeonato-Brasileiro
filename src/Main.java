@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -57,7 +58,9 @@ public class Main {
                         System.out.println("""
                         \nOpções Disponiveis:\n
                         (1) - Criar Partida
-                        (0) - Voltar;
+                        (2) - Ver Tabela
+                        (3) - Mostrar Classificação
+                        (0) - Voltar
                         """);
                         System.out.print("Digite a opção desejada: ");
                         opcaoMenuPartidas = input.nextInt();
@@ -67,7 +70,8 @@ public class Main {
                             case 1:
                                 System.out.print("Para a partida escolha o time principal: ");
                                 String time1 = input.nextLine();
-                                Time time1Encontrado = null;
+                                Time time1Encontrado = new Time();
+
 
                                 for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
                                     if(time1.equalsIgnoreCase(campeonato.getListaDeTimes().get(i).getNomeDoTime())){
@@ -81,7 +85,7 @@ public class Main {
                                 System.out.print("Para a partida escolha o time visitante: ");
                                 String time2 = input.nextLine();
 
-                                Time time2Encontrado = null;
+                                Time time2Encontrado = new Time();
 
                                 for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
                                     if(time2.equalsIgnoreCase(campeonato.getListaDeTimes().get(i).getNomeDoTime())){
@@ -108,20 +112,86 @@ public class Main {
                                 } else if (opcaoEscolhaDeResultado.equalsIgnoreCase("N")) {
                                     System.out.print("Estamos gerando o resultado para você");
                                     Random random = new Random();
-                                    int placarTime1 = random.nextInt(10)+1;
+                                    int placarTime1 = random.nextInt(5)+1;
                                     partida.setPlacarTimeUm(placarTime1);
-                                    int placarTime2 = random.nextInt(10)+1;
+                                    int placarTime2 = random.nextInt(5)+1;
                                     partida.setPlacarTimeDois(placarTime2);
                                 }
 
+                                //ARRUMAR DEPOIS
+                                //setando os atributos dos times para depois salavar no campeonato
+                                time1Encontrado.setGolsMarcados(partida.getPlacarTimeUm());
+                                time1Encontrado.setGolsSofridos(partida.getPlacarTimeDois());
+                                time1Encontrado.setSaldoDeGols(time1Encontrado.getGolsMarcados() - time1Encontrado.getGolsSofridos());
+                                time1Encontrado.setMediaDeGols((double) time1Encontrado.getGolsMarcados()/time1Encontrado.getGolsSofridos());
+
+                                //time de casa ganhou -> entao ele ganha 1 vitoria e 3 pontos
+                                if (partida.getPlacarTimeUm()>partida.getPlacarTimeDois()){
+                                    time1Encontrado.setNumeroDeVitorias(time1Encontrado.getNumeroDeVitorias()+1);
+                                    time1Encontrado.setPontosGanhos(time1Encontrado.getPontosGanhos()+3);
+                                }
+
+                                //time de fora ganhou -> entao ele ganha 1 vitoria e 3 pontos
+                                if (partida.getPlacarTimeDois()> partida.getPlacarTimeUm()) {
+                                    time2Encontrado.setNumeroDeVitorias(time2Encontrado.getNumeroDeVitorias()+1);
+                                    time2Encontrado.setPontosGanhos(time2Encontrado.getPontosGanhos()+3);
+                                }
+
+                                //deu empate na partida -> entao ambos times ganham 1 ponto
+                                if (partida.getPlacarTimeDois()> partida.getPlacarTimeUm()){
+                                    time1Encontrado.setPontosGanhos(time1Encontrado.getPontosGanhos()+1);
+                                    time2Encontrado.setPontosGanhos(time2Encontrado.getPontosGanhos()+1);
+
+                                }
+
+                                time2Encontrado.setGolsMarcados(partida.getPlacarTimeDois());
+                                time2Encontrado.setGolsSofridos(partida.getPlacarTimeUm());
+                                time2Encontrado.setSaldoDeGols(time2Encontrado.getGolsMarcados() - time2Encontrado.getGolsSofridos());
+                                time2Encontrado.setMediaDeGols((double) time2Encontrado.getGolsMarcados()/time2Encontrado.getGolsSofridos());
+
+                                for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
+                                    if (Objects.equals(campeonato.getListaDeTimes().get(i).getNomeDoTime(), time1Encontrado.getNomeDoTime())){
+                                        campeonato.getListaDeTimes().set(i, time1Encontrado);
+                                        System.out.println("Alteracao feita");
+                                    }
+                                }
+
+                                for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
+                                    if (Objects.equals(campeonato.getListaDeTimes().get(i).getNomeDoTime(), time2Encontrado.getNomeDoTime())){
+                                        campeonato.getListaDeTimes().set(i, time2Encontrado);
+                                    }
+                                }
+
+
                                 System.out.print("\nPartida criada: "+ time1Encontrado.getNomeDoTime() + " x "+ time2Encontrado.getNomeDoTime());
-                                System.out.print("Placar criado: "+ partida.getPlacarTimeUm() + " x "+ partida.getPlacarTimeDois()+"\n");
+                                System.out.print("\nPlacar criado: "+ partida.getPlacarTimeUm() + " x "+ partida.getPlacarTimeDois()+"\n");
 
 
                                 //setando a partida na lista de partidas do campeonato
                                 campeonato.getListaDePartidas().add(partida);
 
                                 break;
+                            case 2:
+//                                System.out.println("TIME | PG | GM | GS | S | V | GA |");
+                                System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
+                                for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
+                                    Time timeASerMostrado = campeonato.getListaDeTimes().get(i);
+
+                                    System.out.printf("| %15s | %5d | %5d | %5d | %5d | %5d | %.1f |\n",timeASerMostrado.getNomeDoTime()
+                                            ,timeASerMostrado.getPontosGanhos()
+                                            ,timeASerMostrado.getGolsMarcados()
+                                            ,timeASerMostrado.getGolsSofridos()
+                                            ,timeASerMostrado.getSaldoDeGols()
+                                            ,timeASerMostrado.getNumeroDeVitorias()
+                                            ,timeASerMostrado.getMediaDeGols());
+
+//                                    System.out.print(timeASerMostrado.getNomeDoTime()+" | "+timeASerMostrado.getPontosGanhos()+" | "
+//                                            +timeASerMostrado.getGolsMarcados()+ " | "
+//                                            +timeASerMostrado.getGolsSofridos()+  " | "
+//                                            +timeASerMostrado.getSaldoDeGols()+ " | "
+//                                            +timeASerMostrado.getNumeroDeVitorias()+" | "
+//                                            +timeASerMostrado.getMediaDeGols()+"|\n");
+                                }
                         }
 
 
