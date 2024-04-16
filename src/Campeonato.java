@@ -8,11 +8,17 @@ public class Campeonato {
     private Integer totalDePartidas = 0;
 
 
+    public Campeonato(){
+
+    }
+
     public Campeonato(String nomeDoCampeonato) {
       this.nomeDoCampeonato = nomeDoCampeonato;
     }
 
-
+    public void setNomeDoCampeonato(String nomeDoCampeonato) {
+        this.nomeDoCampeonato = nomeDoCampeonato;
+    }
 
     public ArrayList<Time> getListaDeTimes() {
         return listaDeTimes;
