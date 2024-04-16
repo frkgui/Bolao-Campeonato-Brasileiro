@@ -188,11 +188,15 @@ public class Main {
                                 }
                                 break;
                             case 3:
-                                //variavel auxiliar para pegar o time com mais pontos
-                                int maioresPontos = -1;
-                                Time timeComMaiorPontucao = new Time();
+                                //lista com ordem de pontuacao de maior para menor
+                                int tamanhoDaListaDeTimes = campeonato.getListaDeTimes().size();
+
                                 ArrayList<Time> listaDeTimePorClassificacao = new ArrayList<>();
-                                while (listaDeTimePorClassificacao.size() != campeonato.getListaDeTimes().size()){
+                                while (listaDeTimePorClassificacao.size() != tamanhoDaListaDeTimes){
+                                    //variavel auxiliar para pegar o time com mais pontos
+                                    int maioresPontos = -1;
+                                    Time timeComMaiorPontucao = new Time();
+                                    boolean adicionou = false;
                                     //iterando a lista de times para ver qual tem a maior pontucao na tabela
                                     for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
                                         //se tiverem a mesma pontucao
@@ -201,10 +205,11 @@ public class Main {
                                             int saldoDoTimeDaLista = campeonato.getListaDeTimes().get(i).getSaldoDeGols();
                                             if (saldoDoTimeMaiorPontucao > saldoDoTimeDaLista){
                                                 listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                                                listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                adicionou = true;
                                             } else if (saldoDoTimeMaiorPontucao < saldoDoTimeDaLista) {
-                                                listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                timeComMaiorPontucao = campeonato.getListaDeTimes().get(i);
                                                 listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                                adicionou = true;
                                             }else {
                                                 //se tiverem a mesma pontuacao && saldo de gols
                                                 System.out.println("Times "+timeComMaiorPontucao.getNomeDoTime()+" e "+campeonato.getListaDeTimes().get(i).getNomeDoTime()+" estao com a mesma pontução e saldo de gols...");
@@ -219,10 +224,11 @@ public class Main {
 
                                                 if (partidaConfrontoDireto.getPlacarTimeUm() > partidaConfrontoDireto.getPlacarTimeDois()){
                                                     listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                                                    listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                    adicionou = true;
                                                 } else if (partidaConfrontoDireto.getPlacarTimeUm() < partidaConfrontoDireto.getPlacarTimeDois()) {
-                                                    listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                    timeComMaiorPontucao =campeonato.getListaDeTimes().get(i);
                                                     listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                                    adicionou = true;
                                                 }
 
                                                 campeonato.getListaDePartidas().add(partidaConfrontoDireto);
@@ -234,8 +240,15 @@ public class Main {
                                             maioresPontos = campeonato.getListaDeTimes().get(i).getPontosGanhos();
                                             timeComMaiorPontucao=campeonato.getListaDeTimes().get(i);
                                         }
+
+                                        if (adicionou){
+                                            campeonato.getListaDeTimes().remove(timeComMaiorPontucao);
+                                        }
                                     }
-                                    listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                    if (adicionou == false){
+                                        listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                        campeonato.getListaDeTimes().remove(timeComMaiorPontucao);
+                                    }
                                 }
                                 System.out.println("|                         CLASSIFICAÇÃO                         |");
                                 System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
@@ -249,6 +262,10 @@ public class Main {
                                             ,listaDeTimePorClassificacao.get(i).getNumeroDeVitorias()
                                             ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
                                 }
+                                for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
+                                    campeonato.getListaDeTimes().add(listaDeTimePorClassificacao.get(i));
+                                }
+                                break;
 
 
 
