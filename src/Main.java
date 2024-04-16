@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
@@ -112,9 +113,9 @@ public class Main {
                                 } else if (opcaoEscolhaDeResultado.equalsIgnoreCase("N")) {
                                     System.out.print("Estamos gerando o resultado para você");
                                     Random random = new Random();
-                                    int placarTime1 = random.nextInt(5)+1;
+                                    int placarTime1 = random.nextInt(3)+1;
                                     partida.setPlacarTimeUm(placarTime1);
-                                    int placarTime2 = random.nextInt(5)+1;
+                                    int placarTime2 = random.nextInt(3)+1;
                                     partida.setPlacarTimeDois(placarTime2);
                                 }
 
@@ -138,7 +139,7 @@ public class Main {
                                 }
 
                                 //deu empate na partida -> entao ambos times ganham 1 ponto
-                                if (partida.getPlacarTimeDois()> partida.getPlacarTimeUm()){
+                                if (partida.getPlacarTimeDois()== partida.getPlacarTimeUm()){
                                     time1Encontrado.setPontosGanhos(time1Encontrado.getPontosGanhos()+1);
                                     time2Encontrado.setPontosGanhos(time2Encontrado.getPontosGanhos()+1);
 
@@ -184,14 +185,73 @@ public class Main {
                                             ,timeASerMostrado.getSaldoDeGols()
                                             ,timeASerMostrado.getNumeroDeVitorias()
                                             ,timeASerMostrado.getMediaDeGols());
-
-//                                    System.out.print(timeASerMostrado.getNomeDoTime()+" | "+timeASerMostrado.getPontosGanhos()+" | "
-//                                            +timeASerMostrado.getGolsMarcados()+ " | "
-//                                            +timeASerMostrado.getGolsSofridos()+  " | "
-//                                            +timeASerMostrado.getSaldoDeGols()+ " | "
-//                                            +timeASerMostrado.getNumeroDeVitorias()+" | "
-//                                            +timeASerMostrado.getMediaDeGols()+"|\n");
                                 }
+                                break;
+                            case 3:
+                                //variavel auxiliar para pegar o time com mais pontos
+                                int maioresPontos = -1;
+                                Time timeComMaiorPontucao = new Time();
+                                ArrayList<Time> listaDeTimePorClassificacao = new ArrayList<>();
+                                while (listaDeTimePorClassificacao.size() != campeonato.getListaDeTimes().size()){
+                                    //iterando a lista de times para ver qual tem a maior pontucao na tabela
+                                    for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
+                                        //se tiverem a mesma pontucao
+                                        if (Objects.equals(timeComMaiorPontucao.getPontosGanhos(), campeonato.getListaDeTimes().get(i).getPontosGanhos())){
+                                            int saldoDoTimeMaiorPontucao = timeComMaiorPontucao.getSaldoDeGols();
+                                            int saldoDoTimeDaLista = campeonato.getListaDeTimes().get(i).getSaldoDeGols();
+                                            if (saldoDoTimeMaiorPontucao > saldoDoTimeDaLista){
+                                                listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                                listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                            } else if (saldoDoTimeMaiorPontucao < saldoDoTimeDaLista) {
+                                                listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                            }else {
+                                                //se tiverem a mesma pontuacao && saldo de gols
+                                                System.out.println("Times "+timeComMaiorPontucao.getNomeDoTime()+" e "+campeonato.getListaDeTimes().get(i).getNomeDoTime()+" estao com a mesma pontução e saldo de gols...");
+                                                System.out.println("Vamos fazer um confronto direto!!");
+
+                                                Partida partidaConfrontoDireto = new Partida(timeComMaiorPontucao,campeonato.getListaDeTimes().get(i));
+                                                System.out.println("Defina o placar do time "+partidaConfrontoDireto.getTimeUm().getNomeDoTime()+" :");
+                                                partidaConfrontoDireto.setPlacarTimeUm(input.nextInt());
+
+                                                System.out.println("Defina o placar do time "+partidaConfrontoDireto.getTimeDois().getNomeDoTime()+" :");
+                                                partidaConfrontoDireto.setPlacarTimeDois(input.nextInt());
+
+                                                if (partidaConfrontoDireto.getPlacarTimeUm() > partidaConfrontoDireto.getPlacarTimeDois()){
+                                                    listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                                    listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                } else if (partidaConfrontoDireto.getPlacarTimeUm() < partidaConfrontoDireto.getPlacarTimeDois()) {
+                                                    listaDeTimePorClassificacao.add(campeonato.getListaDeTimes().get(i));
+                                                    listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                                }
+
+                                                campeonato.getListaDePartidas().add(partidaConfrontoDireto);
+
+                                            }
+                                        }
+
+                                        if (campeonato.getListaDeTimes().get(i).getPontosGanhos() > maioresPontos){
+                                            maioresPontos = campeonato.getListaDeTimes().get(i).getPontosGanhos();
+                                            timeComMaiorPontucao=campeonato.getListaDeTimes().get(i);
+                                        }
+                                    }
+                                    listaDeTimePorClassificacao.add(timeComMaiorPontucao);
+                                }
+                                System.out.println("|                         CLASSIFICAÇÃO                         |");
+                                System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
+                                for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
+
+                                    System.out.printf("| %15s | %5d | %5d | %5d | %5d | %5d | %.1f |\n",listaDeTimePorClassificacao.get(i).getNomeDoTime()
+                                            ,listaDeTimePorClassificacao.get(i).getPontosGanhos()
+                                            ,listaDeTimePorClassificacao.get(i).getGolsMarcados()
+                                            ,listaDeTimePorClassificacao.get(i).getGolsSofridos()
+                                            ,listaDeTimePorClassificacao.get(i).getSaldoDeGols()
+                                            ,listaDeTimePorClassificacao.get(i).getNumeroDeVitorias()
+                                            ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
+                                }
+
+
+
                         }
 
 
@@ -207,10 +267,7 @@ public class Main {
                 default:
                     System.out.println("Digite uma opção válida!");
                     break;
-
             }
-
-
         }while(opcaoMenuInicial != 0);
 
 
