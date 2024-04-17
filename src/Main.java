@@ -66,6 +66,8 @@ public class Main {
                         input.nextLine();
 
                         switch (opcaoMenuPartidas){
+                            case 0:
+                                break;
                             case 1:
                                 criarPartidas();
                                 break;
@@ -193,7 +195,12 @@ public class Main {
             @Override
             public int compare(Time t1, Time t2) {
                 if (t1.getPontosGanhos().equals(t2.getPontosGanhos())) {
-                    return t2.getSaldoDeGols().compareTo(t1.getSaldoDeGols()); // Em caso de empate nos pontos, compara o saldo de gols
+                    if (t1.getSaldoDeGols().equals(t2.getSaldoDeGols())) {
+                        // Em caso de empate nos pontos e no saldo de gols, usa o confronto direto
+                        return verificarConfrontoDireto(t2, t1);
+                    } else {
+                        return t2.getSaldoDeGols().compareTo(t1.getSaldoDeGols()); // Em caso de empate nos pontos, compara o saldo de gols
+                    }
                 } else {
                     return t2.getPontosGanhos().compareTo(t1.getPontosGanhos()); // Compara os pontos ganhos
                 }
@@ -203,8 +210,16 @@ public class Main {
         return listaDeTimesClassificada;
     }
 
-    public static void verificarConfrontoDireto(){
-
+    public static int verificarConfrontoDireto(Time time1, Time time2){
+        for(Partida partida : campeonato.getListaDePartidas()){
+            if((partida.getTimeUm().equals(time1) && partida.getTimeDois().equals(time2)) ||
+                    (partida.getTimeUm().equals(time2) && partida.getTimeDois().equals(time1))){
+                if(partida.getPlacarTimeUm() > partida.getPlacarTimeDois()){return 1;}
+                if(partida.getPlacarTimeUm() < partida.getPlacarTimeDois()){return -1;}
+                return 0;
+            }
+        }
+        return 0;
     }
 
     public static void verificaResultadoDaPartida(Partida partida, Time timeDaCasa, Time timeVisitante){
