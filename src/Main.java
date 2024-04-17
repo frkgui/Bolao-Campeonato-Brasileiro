@@ -68,13 +68,14 @@ public class Main {
 
                         switch (opcaoMenuPartidas){
                             case 1:
-                                System.out.print("Digite o nome do time principal: ");
-                                String nomeTime1 = input.nextLine();
+//                                System.out.print("Digite o nome do time principal: ");
+//                                String nomeTime1 = input.nextLine();
+//
+//                                System.out.print("Para a partida escolha o time visitante: ");
+//                                String nomeTime2 = input.nextLine();
 
-                                System.out.print("Para a partida escolha o time visitante: ");
-                                String nomeTime2 = input.nextLine();
-
-                                criarPartida(nomeTime1,nomeTime2);
+//                                criarPartida(nomeTime1,nomeTime2);
+                                criarPartidas();
 
                                 break;
                             case 2:
@@ -149,6 +150,7 @@ public class Main {
             partida.setPlacarTimeUm(input.nextInt());
             System.out.print("Defina o placar de "+time2Encontrado.getNomeDoTime()+" :");
             partida.setPlacarTimeDois(input.nextInt());
+            input.nextLine();
             //se for N o sistemas vai gerar numeros aleatorios entre o 1 a 10 para ambos placares
         } else if (opcaoEscolhaDeResultado.equalsIgnoreCase("N")) {
             System.out.print("Estamos gerando o resultado para você");
@@ -211,6 +213,97 @@ public class Main {
 
     }
 
+    public static void criarPartidas(){
+
+        ArrayList<Time> listaDeTimes = campeonato.getListaDeTimes();
+
+        for (int i = 0; i < listaDeTimes.size(); i++) {
+            Time timeDaCasa = listaDeTimes.get(i);
+
+            for (int j = 0; j < listaDeTimes.size(); j++) {
+                Time timeVisitante = listaDeTimes.get(j);
+
+                if(listaDeTimes.get(i)!=listaDeTimes.get(j)){
+                    Partida partida = new Partida(timeDaCasa,timeVisitante);
+
+
+                    System.out.print("Você deseja escolher o resultado da partida? S ou N\n");
+                    String opcaoEscolhaDeResultado = input.nextLine();
+
+                    //se for S podera escolher o placar
+
+                    if (opcaoEscolhaDeResultado.equalsIgnoreCase("S")) {
+                        System.out.print("Defina o placar de "+timeDaCasa.getNomeDoTime()+" :");
+                        partida.setPlacarTimeUm(input.nextInt());
+                        System.out.print("Defina o placar de "+timeVisitante.getNomeDoTime()+" :");
+                        partida.setPlacarTimeDois(input.nextInt());
+                        input.nextLine();
+
+                    //se for N o sistemas vai gerar numeros aleatorios entre o 1 a 10 para ambos placares
+                    } else if (opcaoEscolhaDeResultado.equalsIgnoreCase("N")) {
+                        System.out.print("Estamos gerando o resultado para você...\n");
+                        Random random = new Random();
+                        int placarTimeDaCasa = random.nextInt(3)+1;
+                        partida.setPlacarTimeUm(placarTimeDaCasa);
+                        int placarTimeVisitante = random.nextInt(3)+1;
+                        partida.setPlacarTimeDois(placarTimeVisitante);
+                    }
+
+                    //ARRUMAR DEPOIS
+                    //setando os atributos dos times para depois salavar no campeonato
+                    timeDaCasa.setGolsMarcados(partida.getPlacarTimeUm());
+                    timeDaCasa.setGolsSofridos(partida.getPlacarTimeDois());
+                    timeDaCasa.setSaldoDeGols(timeDaCasa.getGolsMarcados() - timeDaCasa.getGolsSofridos());
+                    timeDaCasa.setMediaDeGols((double) timeDaCasa.getGolsMarcados()/timeDaCasa.getGolsSofridos());
+
+                    //time de casa ganhou -> entao ele ganha 1 vitoria e 3 pontos
+                    if (partida.getPlacarTimeUm()>partida.getPlacarTimeDois()){
+                        timeDaCasa.setNumeroDeVitorias(timeDaCasa.getNumeroDeVitorias()+1);
+                        timeDaCasa.setPontosGanhos(timeDaCasa.getPontosGanhos()+3);
+                    }
+
+                    //time de fora ganhou -> entao ele ganha 1 vitoria e 3 pontos
+                    if (partida.getPlacarTimeDois()> partida.getPlacarTimeUm()) {
+                        timeVisitante.setNumeroDeVitorias(timeVisitante.getNumeroDeVitorias()+1);
+                        timeVisitante.setPontosGanhos(timeVisitante.getPontosGanhos()+3);
+                    }
+
+                    //deu empate na partida -> entao ambos times ganham 1 ponto
+                    if (partida.getPlacarTimeDois()== partida.getPlacarTimeUm()){
+                        timeDaCasa.setPontosGanhos(timeDaCasa.getPontosGanhos()+1);
+                        timeVisitante.setPontosGanhos(timeVisitante.getPontosGanhos()+1);
+
+                    }
+
+                    timeVisitante.setGolsMarcados(partida.getPlacarTimeDois());
+                    timeVisitante.setGolsSofridos(partida.getPlacarTimeUm());
+                    timeVisitante.setSaldoDeGols(timeVisitante.getGolsMarcados() - timeVisitante.getGolsSofridos());
+                    timeVisitante.setMediaDeGols((double) timeVisitante.getGolsMarcados()/timeVisitante.getGolsSofridos());
+
+                    for (int f = 0; f < campeonato.getListaDeTimes().size(); f++) {
+                        if (Objects.equals(campeonato.getListaDeTimes().get(i).getNomeDoTime(), timeDaCasa.getNomeDoTime())){
+                            campeonato.getListaDeTimes().set(i, timeDaCasa);
+                        }
+                    }
+
+                    for (int f = 0; f < campeonato.getListaDeTimes().size(); f++) {
+                        if (Objects.equals(campeonato.getListaDeTimes().get(i).getNomeDoTime(), timeVisitante.getNomeDoTime())){
+                            campeonato.getListaDeTimes().set(i, timeVisitante);
+                        }
+                    }
+
+                    System.out.print("\nPartida criada: "+ timeDaCasa.getNomeDoTime() + " x "+ timeVisitante.getNomeDoTime());
+                    System.out.print("\nPlacar criado: "+ partida.getPlacarTimeUm() + " x "+ partida.getPlacarTimeDois()+"\n");
+
+                    //setando a partida na lista de partidas do campeonato
+                    campeonato.getListaDePartidas().add(partida);
+                }
+            }
+        }
+
+
+    }
+
     public static void verTabela(){
         System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
         for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
@@ -244,6 +337,10 @@ public class Main {
         });
 
         return listaDeTimesClassificada;
+    }
+
+    public static void verificarConfrontoDireto(){
+
     }
 
 /*    public static void mostrarClassificacao2(){

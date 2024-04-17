@@ -10,6 +10,8 @@ public class Partida {
         this.timeUm = timeUm;
         this.timeDois = timeDois;
         this.idPartida +=1;
+        this.placarTimeUm = 0;
+        this.placarTimeDois = 0;
 
     }
 
