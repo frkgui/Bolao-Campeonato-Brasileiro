@@ -6,21 +6,19 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Variáveis iniciais
+        // Variáveis iniciais...
         int opcaoMenuInicial = 0;
         int opcaoMenuPartidas = 0;
         String nomeDoCampeonato;
 
-
+        // Inicialização do campeonato...
         System.out.println("-- Seja bem vindo ao Simulador & Bolão de Campeonatos! --");
-
-        // Criação do campeonato
         System.out.print("\nDigite o nome do Campeonato a ser criado: ");
         nomeDoCampeonato = input.nextLine();
         campeonato.setNomeDoCampeonato(nomeDoCampeonato);
         System.out.println("\nCampeonato: " + nomeDoCampeonato + ", criado com sucesso!");
 
-        // Menu que o usuario terá acesso!
+        // Menu de criação de times & campeonatos...
         do{
             System.out.println("""
                     \nOpções Disponiveis:\n
@@ -46,7 +44,8 @@ public class Main {
 
                     break;
                 case 2:
-                    //o 4 é o numero minimo de times registrados para prosseguir
+
+                    // É necessário no mínimo 4 time para a inicialização de um campeonato...
                     if (campeonato.getListaDeTimes().size() < 4){
                         System.out.println("\nNumero de times minimo para o campeonato não foi a atingido!");
                         System.out.print("Faltam "+ (4-campeonato.getListaDeTimes().size())+" times para iniciar o campeonato\n");
@@ -54,7 +53,7 @@ public class Main {
                     }
 
                     do {
-                        // Menu de partidas!
+                        // Menu de criação de partidas & visualização de tabelas...
                         System.out.println("""
                         \nOpções Disponiveis:\n
                         (1) - Criar Partidas;
@@ -68,23 +67,13 @@ public class Main {
 
                         switch (opcaoMenuPartidas){
                             case 1:
-//                                System.out.print("Digite o nome do time principal: ");
-//                                String nomeTime1 = input.nextLine();
-//
-//                                System.out.print("Para a partida escolha o time visitante: ");
-//                                String nomeTime2 = input.nextLine();
-
-//                                criarPartida(nomeTime1,nomeTime2);
                                 criarPartidas();
-
                                 break;
                             case 2:
                                 verTabela();
                                 break;
                             case 3:
-
                                 ArrayList<Time> listaDeTimePorClassificacao = mostrarClassificacao();
-
                                 System.out.println("\n|                         CLASSIFICAÇÃO                         |");
                                 System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
                                 for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
@@ -98,6 +87,8 @@ public class Main {
                                             ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
                                 }
                                 break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + opcaoMenuPartidas);
                         }
 
                     }while (opcaoMenuPartidas != 0);
@@ -148,36 +139,10 @@ public class Main {
                         partida.setPlacarTimeDois(placarTimeVisitante);
                     }
 
-                    //ARRUMAR DEPOIS
-                    //setando os atributos dos times para depois salavar no campeonato
-                    timeDaCasa.setGolsMarcados(partida.getPlacarTimeUm());
-                    timeDaCasa.setGolsSofridos(partida.getPlacarTimeDois());
-                    timeDaCasa.setSaldoDeGols();
-                    timeDaCasa.setMediaDeGols();
-
-                    //time de casa ganhou -> entao ele ganha 1 vitoria e 3 pontos
-                    if (partida.getPlacarTimeUm()>partida.getPlacarTimeDois()){
-                        timeDaCasa.setNumeroDeVitorias(timeDaCasa.getNumeroDeVitorias()+1);
-                        timeDaCasa.setPontosGanhos(timeDaCasa.getPontosGanhos()+3);
-                    }
-
-                    //time de fora ganhou -> entao ele ganha 1 vitoria e 3 pontos
-                    if (partida.getPlacarTimeDois()> partida.getPlacarTimeUm()) {
-                        timeVisitante.setNumeroDeVitorias(timeVisitante.getNumeroDeVitorias()+1);
-                        timeVisitante.setPontosGanhos(timeVisitante.getPontosGanhos()+3);
-                    }
-
-                    //deu empate na partida -> entao ambos times ganham 1 ponto
-                    if (partida.getPlacarTimeDois()== partida.getPlacarTimeUm()){
-                        timeDaCasa.setPontosGanhos(timeDaCasa.getPontosGanhos()+1);
-                        timeVisitante.setPontosGanhos(timeVisitante.getPontosGanhos()+1);
-
-                    }
-
-                    timeVisitante.setGolsMarcados(partida.getPlacarTimeDois());
-                    timeVisitante.setGolsSofridos(partida.getPlacarTimeUm());
-                    timeVisitante.setSaldoDeGols();
-                    timeVisitante.setMediaDeGols();
+                    // Setando todos os dados de ambos os times...
+                    timeDaCasa.setarDados(partida.getPlacarTimeUm(),partida.getPlacarTimeDois());
+                    verificaResultadoDaPartida(partida,timeDaCasa,timeVisitante);
+                    timeVisitante.setarDados(partida.getPlacarTimeDois(),partida.getPlacarTimeUm());
 
                     for (int f = 0; f < campeonato.getListaDeTimes().size(); f++) {
                         if (Objects.equals(campeonato.getListaDeTimes().get(i).getNomeDoTime(), timeDaCasa.getNomeDoTime())){
@@ -239,6 +204,29 @@ public class Main {
     }
 
     public static void verificarConfrontoDireto(){
+
+    }
+
+    public static void verificaResultadoDaPartida(Partida partida, Time timeDaCasa, Time timeVisitante){
+
+        //time de casa ganhou -> entao ele ganha 1 vitoria e 3 pontos
+        if (partida.getPlacarTimeUm()>partida.getPlacarTimeDois()){
+            timeDaCasa.setNumeroDeVitorias(timeDaCasa.getNumeroDeVitorias()+1);
+            timeDaCasa.setPontosGanhos(timeDaCasa.getPontosGanhos()+3);
+        }
+
+        //time de fora ganhou -> entao ele ganha 1 vitoria e 3 pontos
+        if (partida.getPlacarTimeDois()> partida.getPlacarTimeUm()) {
+            timeVisitante.setNumeroDeVitorias(timeVisitante.getNumeroDeVitorias()+1);
+            timeVisitante.setPontosGanhos(timeVisitante.getPontosGanhos()+3);
+        }
+
+        //deu empate na partida -> entao ambos times ganham 1 ponto
+        if (partida.getPlacarTimeDois()== partida.getPlacarTimeUm()){
+            timeDaCasa.setPontosGanhos(timeDaCasa.getPontosGanhos()+1);
+            timeVisitante.setPontosGanhos(timeVisitante.getPontosGanhos()+1);
+
+        }
 
     }
 

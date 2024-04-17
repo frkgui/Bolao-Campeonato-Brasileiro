@@ -63,10 +63,6 @@ public class Time {
         return saldoDeGols;
     }
 
-    public void setSaldoDeGols() {
-        this.saldoDeGols = this.golsMarcados - this.golsSofridos;
-    }
-
     public Integer getNumeroDeVitorias() {
         return numeroDeVitorias;
     }
@@ -79,8 +75,10 @@ public class Time {
         return mediaDeGols;
     }
 
-    public void setMediaDeGols() {
-        this.mediaDeGols = this.golsMarcados/this.golsSofridos;
+    public void setarDados(Integer golsMarcados, Integer golsSofridos){
+        this.golsMarcados += golsMarcados;
+        this.golsSofridos += golsSofridos;
+        this.mediaDeGols = (double) this.golsMarcados /this.golsSofridos;
+        this.saldoDeGols = this.golsMarcados - this.golsSofridos;
     }
-
 }
