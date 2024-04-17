@@ -4,8 +4,8 @@ public class Time {
 
     private String nomeDoTime;
     private Integer pontosGanhos;
-    private Integer GolsMarcados;
-    private Integer GolsSofridos;
+    private Integer golsMarcados;
+    private Integer golsSofridos;
     private Integer saldoDeGols;
     private Integer numeroDeVitorias;
     private double mediaDeGols;
@@ -17,8 +17,8 @@ public class Time {
     public Time(String nomeDoTime) {
         this.nomeDoTime = nomeDoTime;
         this.pontosGanhos = 0;
-        this.GolsMarcados = 0;
-        this.GolsSofridos = 0;
+        this.golsMarcados = 0;
+        this.golsSofridos = 0;
         this.saldoDeGols = 0;
         this.numeroDeVitorias = 0;
         this.mediaDeGols = 0;
@@ -44,27 +44,27 @@ public class Time {
     }
 
     public Integer getGolsMarcados() {
-        return GolsMarcados;
+        return golsMarcados;
     }
 
     public void setGolsMarcados(Integer golsMarcados) {
-        GolsMarcados = golsMarcados;
+        this.golsMarcados += golsMarcados;
     }
 
     public Integer getGolsSofridos() {
-        return GolsSofridos;
+        return golsSofridos;
     }
 
     public void setGolsSofridos(Integer golsSofridos) {
-        GolsSofridos = golsSofridos;
+        this.golsSofridos += golsSofridos;
     }
 
     public Integer getSaldoDeGols() {
         return saldoDeGols;
     }
 
-    public void setSaldoDeGols(Integer saldoDeGols) {
-        this.saldoDeGols = saldoDeGols;
+    public void setSaldoDeGols() {
+        this.saldoDeGols = this.golsMarcados - this.golsSofridos;
     }
 
     public Integer getNumeroDeVitorias() {
@@ -79,7 +79,8 @@ public class Time {
         return mediaDeGols;
     }
 
-    public void setMediaDeGols(double mediaDeGols) {
-        this.mediaDeGols = mediaDeGols;
+    public void setMediaDeGols() {
+        this.mediaDeGols = this.golsMarcados/this.golsSofridos;
     }
+
 }
