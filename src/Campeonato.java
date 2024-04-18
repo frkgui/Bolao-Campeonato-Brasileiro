@@ -44,6 +44,10 @@ public class Campeonato {
         this.totalDePartidas = totalDePartidas;
     }
 
+    public String getNomeDoCampeonato() {
+        return nomeDoCampeonato;
+    }
+
     public void adicionarPartida(Partida partida){
 
     }

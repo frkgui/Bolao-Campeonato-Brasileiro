@@ -7,24 +7,22 @@ public class Main {
     public static void main(String[] args) {
 
         // Variáveis iniciais...
+        int opcaoMenuCampeonato = 0;
         int opcaoMenuInicial = 0;
+        int opcaoMenuBolao = 0;
         int opcaoMenuPartidas = 0;
         String nomeDoCampeonato;
 
         // Inicialização do campeonato...
         System.out.println("-- Seja bem vindo ao Simulador & Bolão de Campeonatos! --");
-        System.out.print("\nDigite o nome do Campeonato a ser criado: ");
-        nomeDoCampeonato = input.nextLine();
-        campeonato.setNomeDoCampeonato(nomeDoCampeonato);
-        System.out.println("\nCampeonato: " + nomeDoCampeonato + ", criado com sucesso!");
 
-        // Menu de criação de times & campeonatos...
+
         do{
             System.out.println("""
                     \nOpções Disponiveis:\n
-                    (1) - Cadastrar Time; 
-                    (2) - Iniciar campeonato;
-                    (3) - Carregar arquivo de campeonato;
+                    (1) - Campeonato; 
+                    (2) - Bolão;
+                    (3) - Carregar dados
                     (0) - Sair;
                     """);
             System.out.print("Digite a opção desejada: ");
@@ -32,77 +30,113 @@ public class Main {
             input.nextLine();
 
             switch (opcaoMenuInicial){
-
-                case 1:
-                    System.out.print("\nDigite o nome do time a ser cadastrado: ");
-                    String nomeDoTime = input.nextLine();
-
-                    Time time = new Time(nomeDoTime);
-                    campeonato.adicionarTime(time);
-
-                    System.out.println("\nTime: " + nomeDoTime + " adicionado ao campeonato!");
-                    System.out.println("Numero de times cadastrados: " + campeonato.getListaDeTimes().size());
-
+                case 0:
                     break;
-                case 2:
-
-                    // É necessário no mínimo 4 time para a inicialização de um campeonato...
-                    if (campeonato.getListaDeTimes().size() < 4){
-                        System.out.println("\nNumero de times minimo para o campeonato não foi a atingido!");
-                        System.out.print("Faltam "+ (4-campeonato.getListaDeTimes().size())+" times para iniciar o campeonato\n");
-                        break;
+                case 1:
+                    if(campeonato.getNomeDoCampeonato()==null) {
+                        System.out.print("\nDigite o nome do Campeonato a ser criado: ");
+                        nomeDoCampeonato = input.nextLine();
+                        campeonato.setNomeDoCampeonato(nomeDoCampeonato);
+                        System.out.println("\nCampeonato: " + nomeDoCampeonato + ", criado com sucesso!");
                     }
+                    do{
 
-                    do {
-                        // Menu de criação de partidas & visualização de tabelas...
                         System.out.println("""
+                    \nOpções Disponiveis:\n
+                    (1) - Cadastrar Time; 
+                    (2) - Iniciar campeonato;
+                    (0) - Voltar ao menu principal;
+                    """);
+                        System.out.print("Digite a opção desejada: ");
+                        opcaoMenuCampeonato = input.nextInt();
+                        input.nextLine();
+
+                        switch (opcaoMenuCampeonato){
+
+                            case 1:
+                                System.out.print("\nDigite o nome do time a ser cadastrado: ");
+                                String nomeDoTime = input.nextLine();
+
+                                Time time = new Time(nomeDoTime);
+                                campeonato.adicionarTime(time);
+
+                                System.out.println("\nTime: " + nomeDoTime + " adicionado ao campeonato!");
+                                System.out.println("Numero de times cadastrados: " + campeonato.getListaDeTimes().size());
+
+                                break;
+                            case 2:
+
+                                // É necessário no mínimo 4 time para a inicialização de um campeonato...
+                                if (campeonato.getListaDeTimes().size() < 4){
+                                    System.out.println("\nNumero de times minimo para o campeonato não foi a atingido!");
+                                    System.out.print("Faltam "+ (4-campeonato.getListaDeTimes().size())+" times para iniciar o campeonato\n");
+                                    break;
+                                }
+
+                                do {
+                                    // Menu de criação de partidas & visualização de tabelas...
+                                    System.out.println("""
                         \nOpções Disponiveis:\n
                         (1) - Criar Partidas;
                         (2) - Ver Tabela;
                         (3) - Mostrar Classificação;
+                        (4) - Salvar Campeonato;
                         (0) - Voltar;
                         """);
-                        System.out.print("Digite a opção desejada: ");
-                        opcaoMenuPartidas = input.nextInt();
-                        input.nextLine();
+                                    System.out.print("Digite a opção desejada: ");
+                                    opcaoMenuPartidas = input.nextInt();
+                                    input.nextLine();
 
-                        switch (opcaoMenuPartidas){
+                                    switch (opcaoMenuPartidas){
+                                        case 0:
+                                            break;
+                                        case 1:
+                                            criarPartidas();
+                                            break;
+                                        case 2:
+                                            verTabela();
+                                            break;
+                                        case 3:
+                                            ArrayList<Time> listaDeTimePorClassificacao = mostrarClassificacao();
+                                            System.out.println("\n|                         CLASSIFICAÇÃO                         |");
+                                            System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
+                                            for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
+
+                                                System.out.printf("| %15s | %5d | %5d | %5d | %5d | %5d | %.1f |\n",listaDeTimePorClassificacao.get(i).getNomeDoTime()
+                                                        ,listaDeTimePorClassificacao.get(i).getPontosGanhos()
+                                                        ,listaDeTimePorClassificacao.get(i).getGolsMarcados()
+                                                        ,listaDeTimePorClassificacao.get(i).getGolsSofridos()
+                                                        ,listaDeTimePorClassificacao.get(i).getSaldoDeGols()
+                                                        ,listaDeTimePorClassificacao.get(i).getNumeroDeVitorias()
+                                                        ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
+                                            }
+                                            break;
+                                        default:
+                                            throw new IllegalStateException("Unexpected value: " + opcaoMenuPartidas);
+                                    }
+
+                                }while (opcaoMenuPartidas != 0);
+                                break;
                             case 0:
                                 break;
-                            case 1:
-                                criarPartidas();
-                                break;
-                            case 2:
-                                verTabela();
-                                break;
-                            case 3:
-                                ArrayList<Time> listaDeTimePorClassificacao = mostrarClassificacao();
-                                System.out.println("\n|                         CLASSIFICAÇÃO                         |");
-                                System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
-                                for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
-
-                                    System.out.printf("| %15s | %5d | %5d | %5d | %5d | %5d | %.1f |\n",listaDeTimePorClassificacao.get(i).getNomeDoTime()
-                                            ,listaDeTimePorClassificacao.get(i).getPontosGanhos()
-                                            ,listaDeTimePorClassificacao.get(i).getGolsMarcados()
-                                            ,listaDeTimePorClassificacao.get(i).getGolsSofridos()
-                                            ,listaDeTimePorClassificacao.get(i).getSaldoDeGols()
-                                            ,listaDeTimePorClassificacao.get(i).getNumeroDeVitorias()
-                                            ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
-                                }
-                                break;
                             default:
-                                throw new IllegalStateException("Unexpected value: " + opcaoMenuPartidas);
+                                System.out.println("Digite uma opção válida!");
+                                break;
                         }
 
-                    }while (opcaoMenuPartidas != 0);
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Digite uma opção válida!");
-                    break;
+
+                    }while(opcaoMenuCampeonato != 0);
             }
-        }while(opcaoMenuInicial != 0);
+
+
+        }while (opcaoMenuInicial != 0);
+
+
+
+//        // Menu de criação de times & campeonatos...
+//        do{
+//
+//        }while(opcaoMenuCampeonato != 0);
 
     }
 
