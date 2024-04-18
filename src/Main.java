@@ -24,6 +24,7 @@ public class Main {
                     \nOpções Disponiveis:\n
                     (1) - Cadastrar Time; 
                     (2) - Iniciar campeonato;
+                    (3) - Carregar arquivo de campeonato;
                     (0) - Sair;
                     """);
             System.out.print("Digite a opção desejada: ");
