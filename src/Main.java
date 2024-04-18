@@ -3,9 +3,9 @@ import java.util.*;
 public class Main {
     static Scanner input = new Scanner(System.in);
     private static Campeonato campeonato = new Campeonato();
+    private static Resultado resultado = new Resultado();
 
     public static void main(String[] args) {
-
         // Variáveis iniciais...
         int opcaoMenuCampeonato = 0;
         int opcaoMenuInicial = 0;
@@ -20,7 +20,7 @@ public class Main {
         do{
             System.out.println("""
                     \nOpções Disponiveis:\n
-                    (1) - Campeonato; 
+                    (1) - Campeonato;
                     (2) - Bolão;
                     (3) - Carregar dados
                     (0) - Sair;
@@ -76,13 +76,13 @@ public class Main {
                                 do {
                                     // Menu de criação de partidas & visualização de tabelas...
                                     System.out.println("""
-                        \nOpções Disponiveis:\n
-                        (1) - Criar Partidas;
-                        (2) - Ver Tabela;
-                        (3) - Mostrar Classificação;
-                        (4) - Salvar Campeonato;
-                        (0) - Voltar;
-                        """);
+                                    \nOpções Disponiveis:\n
+                                    (1) - Criar Partidas;
+                                    (2) - Ver Tabela;
+                                    (3) - Mostrar Classificação;
+                                    (4) - Salvar Campeonato;
+                                    (0) - Voltar;
+                                    """);
                                     System.out.print("Digite a opção desejada: ");
                                     opcaoMenuPartidas = input.nextInt();
                                     input.nextLine();
@@ -126,6 +126,34 @@ public class Main {
 
 
                     }while(opcaoMenuCampeonato != 0);
+                    break;
+                case 2:
+                    do {
+                        System.out.println("""
+                                    \nOpções Disponiveis:\n
+                                    (1) - Criar bolão;
+                                    (2) - Visualizar bolões;
+                                    (3) - Ver resultados dos bolões;              
+                                    (0) - Voltar;
+                                    """);
+                        System.out.print("Digite a opção desejada: ");
+                        opcaoMenuBolao = input.nextInt();
+                        input.nextLine();
+
+                        switch (opcaoMenuBolao){
+                            case 0:
+                                break;
+                            case 1:
+                                System.out.print("Digite seu nome: ");
+                                String nomeDoApostador= input.nextLine();
+                                Bolao bolao = new Bolao(nomeDoApostador);
+                                resultado.getListaDeBoloes().add(bolao);
+                        }
+
+                    }while (opcaoMenuBolao != 0);
+
+
+
             }
 
 
