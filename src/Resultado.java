@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Resultado {
     private Time timeVencedor;
-    private ArrayList<Bolao> listaDeBoloes;
+    private ArrayList<Bolao> listaDeBoloes = new ArrayList<>();
     private Bolao bolaoVencedor;
 
     public Resultado() {}

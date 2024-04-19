@@ -147,7 +147,44 @@ public class Main {
                                 System.out.print("Digite seu nome: ");
                                 String nomeDoApostador= input.nextLine();
                                 Bolao bolao = new Bolao(nomeDoApostador);
+                                bolao.setPartidasCampeonato(campeonato.getListaDePartidas());
                                 resultado.getListaDeBoloes().add(bolao);
+
+                                for (int i =0; i < campeonato.getListaDePartidas().size(); i++) {
+                                    Time time1 = campeonato.getListaDePartidas().get(i).getTimeUm();
+                                    Time time2 = campeonato.getListaDePartidas().get(i).getTimeDois();
+                                    
+                                    System.out.println("Partida: " +time1.getNomeDoTime()+" x "+time2.getNomeDoTime());
+                                    System.out.print("Defina o placar de "+time1.getNomeDoTime()+": ");
+                                    int placarDotime1 = input.nextInt();
+                                    System.out.print("Defina o placar de "+time2.getNomeDoTime()+": ");
+                                    int placarDotime2 = input.nextInt();
+                                    String palpite = placarDotime1+"x"+placarDotime2;
+                                    
+                                    //insercao de pontos no bolao
+                                    if (campeonato.getListaDePartidas().get(i).getPlacarTimeUm() == placarDotime1 && campeonato.getListaDePartidas().get(i).getPlacarTimeDois()==placarDotime2){
+                                        bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+5);
+                                    } else if (campeonato.getListaDePartidas().get(i).getPlacarTimeUm() >= campeonato.getListaDePartidas().get(i).getPlacarTimeDois() && placarDotime1 >= placarDotime2 ) {
+                                        bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+3);
+                                    } else if (campeonato.getListaDePartidas().get(i).getPlacarTimeDois() >= campeonato.getListaDePartidas().get(i).getPlacarTimeUm() && placarDotime2 >= placarDotime1 ) {
+                                        bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+3);
+                                    }
+
+                                    bolao.getPalpitePartidas().add(palpite);
+                                    System.out.println();
+                                    System.out.println((bolao.getPalpitePartidas().get(i)+1)+" Palpite adicionado!");
+                                }
+
+                                resultado.getListaDeBoloes().add(bolao);
+
+                                break;
+                            case 2:
+                                for (int i = 0; i < resultado.getListaDeBoloes().size(); i++) {
+                                    System.out.println(resultado.getListaDeBoloes().get(i));
+                                }
+
+
+
                         }
 
                     }while (opcaoMenuBolao != 0);
@@ -186,7 +223,6 @@ public class Main {
                     String opcaoEscolhaDeResultado = input.nextLine();
 
                     //se for S podera escolher o placar
-
                     if (opcaoEscolhaDeResultado.equalsIgnoreCase("S")) {
                         System.out.print("Defina o placar de "+timeDaCasa.getNomeDoTime()+": ");
                         partida.setPlacarTimeUm(input.nextInt());
@@ -194,7 +230,7 @@ public class Main {
                         partida.setPlacarTimeDois(input.nextInt());
                         input.nextLine();
 
-                    //se for N o sistemas vai gerar numeros aleatorios entre o 1 a 10 para ambos placares
+                    //se for N o sistema vai gerar numeros aleatorios entre o 1 a 3 para ambos placares
                     } else if (opcaoEscolhaDeResultado.equalsIgnoreCase("N")) {
                         System.out.print("Estamos gerando o resultado para você...\n");
                         Random random = new Random();

@@ -54,4 +54,15 @@ public class Partida {
     public void setPlacarTimeDois(Integer placarTimeDois) {
         this.placarTimeDois = placarTimeDois;
     }
+
+    @Override
+    public String toString() {
+        return "Partida{" +
+                "idPartida=" + idPartida +
+                ", timeUm=" + timeUm +
+                ", timeDois=" + timeDois +
+                ", placarTimeUm=" + placarTimeUm +
+                ", placarTimeDois=" + placarTimeDois +
+                '}';
+    }
 }

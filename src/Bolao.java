@@ -2,10 +2,10 @@ import java.util.ArrayList;
 
 public class Bolao {
     private String nomeDoApostador;
-    private ArrayList<String> palpitePartidas;
+    private ArrayList<String> palpitePartidas = new ArrayList<>();
 
-    private ArrayList<Partida> partidasCampeonato;
-    private Integer pontuacaoTotal;
+    private ArrayList<Partida> partidasCampeonato = new ArrayList<>();
+    private Integer pontuacaoTotal = 0;
 
     public Bolao(String nomeDoApostador) {
         this.nomeDoApostador = nomeDoApostador;

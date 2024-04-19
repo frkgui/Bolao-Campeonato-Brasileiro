@@ -58,7 +58,15 @@ public class Campeonato {
 
     }
 
+
     public void adicionarTime(Time time){
         this.listaDeTimes.add(time);
+    }
+
+    @Override
+    public String toString() {
+        return "Campeonato{" +
+                "listaDePartidas=" + listaDePartidas +
+                '}';
     }
 }
