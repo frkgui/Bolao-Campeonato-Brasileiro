@@ -19,6 +19,10 @@ public class Resultado {
         return listaDeBoloes;
     }
 
+    public String getNomesDosBoloes(int index){
+        return "Bolao de " + listaDeBoloes.get(index).getNomeDoApostador();
+    }
+
     public void setListaDeBoloes(ArrayList<Bolao> listaDeBoloes) {
         this.listaDeBoloes = listaDeBoloes;
     }
@@ -30,4 +34,12 @@ public class Resultado {
     public void setBolaoVencedor(Bolao bolaoVencedor) {
         this.bolaoVencedor = bolaoVencedor;
     }
+
+    // Método que retorna um bolão específico...
+    public void visualizarBolao(int idDoBolao){
+        for (int i = 0; i < getListaDeBoloes().get(idDoBolao).getPalpitePartidas().size(); i++) {
+            System.out.println(getListaDeBoloes().get(idDoBolao).getPartidaString(i));
+        }
+    }
+
 }

@@ -52,12 +52,9 @@ public class Campeonato {
 
     }
 
-    // métodos
-
     public void iniciarRodada(ArrayList<Partida> listaDePartidas){
 
     }
-
 
     public void adicionarTime(Time time){
         this.listaDeTimes.add(time);

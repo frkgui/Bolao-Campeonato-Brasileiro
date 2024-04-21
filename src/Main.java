@@ -16,7 +16,7 @@ public class Main {
         // Inicialização do campeonato...
         System.out.println("-- Seja bem vindo ao Simulador & Bolão de Campeonatos! --");
 
-
+        // Menu principal
         do{
             System.out.println("""
                     \nOpções Disponiveis:\n
@@ -32,6 +32,7 @@ public class Main {
             switch (opcaoMenuInicial){
                 case 0:
                     break;
+                // Menu do campeonato
                 case 1:
                     if(campeonato.getNomeDoCampeonato()==null) {
                         System.out.print("\nDigite o nome do Campeonato a ser criado: ");
@@ -72,9 +73,8 @@ public class Main {
                                     System.out.print("Faltam "+ (4-campeonato.getListaDeTimes().size())+" times para iniciar o campeonato\n");
                                     break;
                                 }
-
+                                // Menu de criação de partidas & visualização de tabelas...
                                 do {
-                                    // Menu de criação de partidas & visualização de tabelas...
                                     System.out.println("""
                                     \nOpções Disponiveis:\n
                                     (1) - Criar Partidas;
@@ -127,13 +127,14 @@ public class Main {
 
                     }while(opcaoMenuCampeonato != 0);
                     break;
+                // Menu dos bolões
                 case 2:
                     do {
                         System.out.println("""
                                     \nOpções Disponiveis:\n
                                     (1) - Criar bolão;
                                     (2) - Visualizar bolões;
-                                    (3) - Ver resultados dos bolões;              
+                                    (3) - Ver resultados dos bolões;
                                     (0) - Voltar;
                                     """);
                         System.out.print("Digite a opção desejada: ");
@@ -146,45 +147,23 @@ public class Main {
                             case 1:
                                 System.out.print("Digite seu nome: ");
                                 String nomeDoApostador= input.nextLine();
-                                Bolao bolao = new Bolao(nomeDoApostador);
-                                bolao.setPartidasCampeonato(campeonato.getListaDePartidas());
-                                resultado.getListaDeBoloes().add(bolao);
-
-                                for (int i =0; i < campeonato.getListaDePartidas().size(); i++) {
-                                    Time time1 = campeonato.getListaDePartidas().get(i).getTimeUm();
-                                    Time time2 = campeonato.getListaDePartidas().get(i).getTimeDois();
-                                    
-                                    System.out.println("Partida: " +time1.getNomeDoTime()+" x "+time2.getNomeDoTime());
-                                    System.out.print("Defina o placar de "+time1.getNomeDoTime()+": ");
-                                    int placarDotime1 = input.nextInt();
-                                    System.out.print("Defina o placar de "+time2.getNomeDoTime()+": ");
-                                    int placarDotime2 = input.nextInt();
-                                    String palpite = placarDotime1+"x"+placarDotime2;
-                                    
-                                    //insercao de pontos no bolao
-                                    if (campeonato.getListaDePartidas().get(i).getPlacarTimeUm() == placarDotime1 && campeonato.getListaDePartidas().get(i).getPlacarTimeDois()==placarDotime2){
-                                        bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+5);
-                                    } else if (campeonato.getListaDePartidas().get(i).getPlacarTimeUm() >= campeonato.getListaDePartidas().get(i).getPlacarTimeDois() && placarDotime1 >= placarDotime2 ) {
-                                        bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+3);
-                                    } else if (campeonato.getListaDePartidas().get(i).getPlacarTimeDois() >= campeonato.getListaDePartidas().get(i).getPlacarTimeUm() && placarDotime2 >= placarDotime1 ) {
-                                        bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+3);
-                                    }
-
-                                    bolao.getPalpitePartidas().add(palpite);
-                                    System.out.println();
-                                    System.out.println((bolao.getPalpitePartidas().get(i)+1)+" Palpite adicionado!");
-                                }
-
-                                resultado.getListaDeBoloes().add(bolao);
+                                Bolao bolao = criarNovoBolao(nomeDoApostador);
 
                                 break;
                             case 2:
                                 for (int i = 0; i < resultado.getListaDeBoloes().size(); i++) {
-                                    System.out.println(resultado.getListaDeBoloes().get(i));
+                                    System.out.println("Id: " + i + ", " + resultado.getNomesDosBoloes(i) + "\n");
                                 }
 
+                                System.out.print("Digite o id do bolão a ser visualizado: ");
+                                int bolaoEscolhido = input.nextInt();
+                                input.nextLine();
 
+                                System.out.println("\nPalpites: ");
 
+                                resultado.visualizarBolao(bolaoEscolhido);
+
+                                break;
                         }
 
                     }while (opcaoMenuBolao != 0);
@@ -195,13 +174,6 @@ public class Main {
 
 
         }while (opcaoMenuInicial != 0);
-
-
-
-//        // Menu de criação de times & campeonatos...
-//        do{
-//
-//        }while(opcaoMenuCampeonato != 0);
 
     }
 
@@ -344,86 +316,39 @@ public class Main {
 
     }
 
-/*    public static void mostrarClassificacao2(){
-        //lista com ordem de pontuacao de maior para menor
-        int tamanhoDaListaDeTimes = campeonato.getListaDeTimes().size();
+    public static Bolao criarNovoBolao(String nomeDoApostador){
+        Bolao bolao = new Bolao(nomeDoApostador);
+        bolao.setPartidasCampeonato(campeonato.getListaDePartidas());
 
-        ArrayList<Time> listaDeTimePorClassificacao = new ArrayList<>();
-        while (listaDeTimePorClassificacao.size() != tamanhoDaListaDeTimes){
-            //variavel auxiliar para pegar o time com mais pontos
-            int maioresPontos = -1;
-            Time timeComMaiorPontucao = new Time();
-            boolean adicionou = false;
-            //iterando a lista de times para ver qual tem a maior pontucao na tabela
-            for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
-                //se tiverem a mesma pontucao
-                if (Objects.equals(timeComMaiorPontucao.getPontosGanhos(), campeonato.getListaDeTimes().get(i).getPontosGanhos())){
-                    int saldoDoTimeMaiorPontucao = timeComMaiorPontucao.getSaldoDeGols();
-                    int saldoDoTimeDaLista = campeonato.getListaDeTimes().get(i).getSaldoDeGols();
-                    if (saldoDoTimeMaiorPontucao > saldoDoTimeDaLista){
-                        listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                        adicionou = true;
-                    } else if (saldoDoTimeMaiorPontucao < saldoDoTimeDaLista) {
-                        timeComMaiorPontucao = campeonato.getListaDeTimes().get(i);
-                        listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                        adicionou = true;
-                    }else {
-                        //se tiverem a mesma pontuacao && saldo de gols
-                        System.out.println("Times "+timeComMaiorPontucao.getNomeDoTime()+" e "+campeonato.getListaDeTimes().get(i).getNomeDoTime()+" estao com a mesma pontução e saldo de gols...");
-                        System.out.println("Vamos fazer um confronto direto!!");
+        for (int i =0; i < campeonato.getListaDePartidas().size(); i++) {
+            Time time1 = campeonato.getListaDePartidas().get(i).getTimeUm();
+            Time time2 = campeonato.getListaDePartidas().get(i).getTimeDois();
 
-                        Partida partidaConfrontoDireto = new Partida(timeComMaiorPontucao,campeonato.getListaDeTimes().get(i));
-                        System.out.println("Defina o placar do time "+partidaConfrontoDireto.getTimeUm().getNomeDoTime()+" :");
-                        partidaConfrontoDireto.setPlacarTimeUm(input.nextInt());
+            System.out.println("\nPartida: " +time1.getNomeDoTime()+" x "+time2.getNomeDoTime());
+            System.out.print("Defina o placar de "+time1.getNomeDoTime()+": ");
+            int placarDotime1 = input.nextInt();
+            System.out.print("Defina o placar de "+time2.getNomeDoTime()+": ");
+            int placarDotime2 = input.nextInt();
+            String palpite = placarDotime1+"x"+placarDotime2;
 
-                        System.out.println("Defina o placar do time "+partidaConfrontoDireto.getTimeDois().getNomeDoTime()+" :");
-                        partidaConfrontoDireto.setPlacarTimeDois(input.nextInt());
-
-                        if (partidaConfrontoDireto.getPlacarTimeUm() > partidaConfrontoDireto.getPlacarTimeDois()){
-                            listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                            adicionou = true;
-                        } else if (partidaConfrontoDireto.getPlacarTimeUm() < partidaConfrontoDireto.getPlacarTimeDois()) {
-                            timeComMaiorPontucao =campeonato.getListaDeTimes().get(i);
-                            listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                            adicionou = true;
-                        }
-
-                        campeonato.getListaDePartidas().add(partidaConfrontoDireto);
-
-                    }
-                }
-
-                if (campeonato.getListaDeTimes().get(i).getPontosGanhos() > maioresPontos){
-                    maioresPontos = campeonato.getListaDeTimes().get(i).getPontosGanhos();
-                    timeComMaiorPontucao=campeonato.getListaDeTimes().get(i);
-                }
-
-                if (adicionou){
-                    campeonato.getListaDeTimes().remove(timeComMaiorPontucao);
-                }
+            //insercao de pontos no bolao
+            if (campeonato.getListaDePartidas().get(i).getPlacarTimeUm() == placarDotime1 && campeonato.getListaDePartidas().get(i).getPlacarTimeDois()==placarDotime2){
+                bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+5);
+            } else if (campeonato.getListaDePartidas().get(i).getPlacarTimeUm() >= campeonato.getListaDePartidas().get(i).getPlacarTimeDois() && placarDotime1 >= placarDotime2 ) {
+                bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+3);
+            } else if (campeonato.getListaDePartidas().get(i).getPlacarTimeDois() >= campeonato.getListaDePartidas().get(i).getPlacarTimeUm() && placarDotime2 >= placarDotime1 ) {
+                bolao.setPontuacaoTotal(bolao.getPontuacaoTotal()+3);
             }
-            if (adicionou == false){
-                listaDeTimePorClassificacao.add(timeComMaiorPontucao);
-                campeonato.getListaDeTimes().remove(timeComMaiorPontucao);
-            }
-        }
-        System.out.println("|                         CLASSIFICAÇÃO                         |");
-        System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
-        for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
 
-            System.out.printf("| %15s | %5d | %5d | %5d | %5d | %5d | %.1f |\n",listaDeTimePorClassificacao.get(i).getNomeDoTime()
-                    ,listaDeTimePorClassificacao.get(i).getPontosGanhos()
-                    ,listaDeTimePorClassificacao.get(i).getGolsMarcados()
-                    ,listaDeTimePorClassificacao.get(i).getGolsSofridos()
-                    ,listaDeTimePorClassificacao.get(i).getSaldoDeGols()
-                    ,listaDeTimePorClassificacao.get(i).getNumeroDeVitorias()
-                    ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
+            bolao.getPalpitePartidas().add(palpite);
+            System.out.println();
+            System.out.println((bolao.getPartidaString(i))+ " - Palpite adicionado!\n");
         }
-        for (int i = 0; i < listaDeTimePorClassificacao.size(); i++) {
-            campeonato.getListaDeTimes().add(listaDeTimePorClassificacao.get(i));
-        }
-        break;
-    }*/
+
+        resultado.getListaDeBoloes().add(bolao);
+
+        return bolao;
+    }
 
 
 }
