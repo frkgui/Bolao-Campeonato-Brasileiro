@@ -111,6 +111,9 @@ public class Main {
                                                         ,listaDeTimePorClassificacao.get(i).getMediaDeGols());
                                             }
                                             break;
+                                        case 4:
+                                            //salvar campeonato
+                                            break;
                                         default:
                                             throw new IllegalStateException("Unexpected value: " + opcaoMenuPartidas);
                                     }
@@ -133,7 +136,7 @@ public class Main {
                         System.out.println("""
                                     \nOpções Disponiveis:\n
                                     (1) - Criar bolão;
-                                    (2) - Visualizar bolões;
+                                    (2) - Visualizar bolão;
                                     (3) - Ver resultados dos bolões;
                                     (0) - Voltar;
                                     """);
@@ -147,29 +150,35 @@ public class Main {
                             case 1:
                                 System.out.print("Digite seu nome: ");
                                 String nomeDoApostador= input.nextLine();
-                                Bolao bolao = criarNovoBolao(nomeDoApostador);
+                                criarNovoBolao(nomeDoApostador);
 
                                 break;
                             case 2:
-                                for (int i = 0; i < resultado.getListaDeBoloes().size(); i++) {
-                                    System.out.println("Id: " + i + ", " + resultado.getNomesDosBoloes(i) + "\n");
-                                }
+                                System.out.print("Digite o nome do seu bolão para visualizar: ");
+                                String nomeBolao = input.nextLine();
 
-                                System.out.print("Digite o id do bolão a ser visualizado: ");
-                                int bolaoEscolhido = input.nextInt();
-                                input.nextLine();
-
-                                System.out.println("\nPalpites: ");
-
-                                resultado.visualizarBolao(bolaoEscolhido);
-
+                                Bolao bolaoEncontrado = resultado.getBolao(nomeBolao);
+                                resultado.vizualizarPalpites(bolaoEncontrado);
                                 break;
+                            case 3:
+                                Bolao bolaoVencedor = resultado.encontrarBolaoVencedor();
+                                resultado.setBolaoVencedor(bolaoVencedor);
+                                System.out.println("De acordo com o campeonato "+ campeonato.getNomeDoCampeonato()+", o bolão vencedor: "+bolaoVencedor.getNomeDoApostador()+" com a pontucao de "+bolaoVencedor.getPontuacaoTotal()+" pontos!");
+                                System.out.println("A pontução dos outros bolões aqui:");
+                                for (int i = 0; i < resultado.getListaDeBoloes().size(); i++) {
+                                    if(!Objects.equals(resultado.getListaDeBoloes().get(i),resultado.getBolaoVencedor())){
+                                        System.out.println("Bolão: "+resultado.getListaDeBoloes().get(i).getNomeDoApostador()
+                                                +", com "+resultado.getListaDeBoloes().get(i).getPontuacaoTotal()+" pontos...");
+
+                                    }
+                                }
                         }
 
                     }while (opcaoMenuBolao != 0);
-
-
-
+                    break;
+                case 3:
+                    //carregar dados
+                    break;
             }
 
 
