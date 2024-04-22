@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
@@ -5,7 +8,7 @@ public class Main {
     private static Campeonato campeonato = new Campeonato();
     private static Resultado resultado = new Resultado();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Variáveis iniciais...
         int opcaoMenuCampeonato = 0;
         int opcaoMenuInicial = 0;
@@ -80,7 +83,7 @@ public class Main {
                                     (1) - Criar Partidas;
                                     (2) - Ver Tabela;
                                     (3) - Mostrar Classificação;
-                                    (4) - Salvar Campeonato;
+                                    (4) - Salvar dados do Campeonato;
                                     (0) - Voltar;
                                     """);
                                     System.out.print("Digite a opção desejada: ");
@@ -112,6 +115,7 @@ public class Main {
                                             }
                                             break;
                                         case 4:
+                                            criarArquivo();
                                             //salvar campeonato
                                             break;
                                         default:
@@ -267,7 +271,6 @@ public class Main {
     }
 
     public static ArrayList<Time> mostrarClassificacao(){
-// ...
 
         ArrayList<Time> listaDeTimesClassificada = campeonato.getListaDeTimes();
 
@@ -359,5 +362,25 @@ public class Main {
         return bolao;
     }
 
+    public static void criarArquivo() throws IOException {
+        ArrayList<Time> listaDeTimesClassificados = mostrarClassificacao();
+        String nomeCampeonato = campeonato.getNomeDoCampeonato();
+        //Criando o arquivo na pasta "arquivos" dentro desse projeto
+        File file = new File("C:\\Users\\Admin\\IdeaProjects\\Bolao-Campeonato-Brasileiro\\src\\arquivos\\"+nomeCampeonato+".csv");
+        FileWriter escreverArquivo = new FileWriter(file);
+        for (int i = 0; i < listaDeTimesClassificados.size(); i++) {
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getNomeDoTime()))+",");
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getPontosGanhos()))+",");
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getGolsMarcados()))+",");
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getGolsSofridos()))+",");
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getSaldoDeGols()))+",");
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getNumeroDeVitorias()))+",");
+            escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getMediaDeGols()))+"\n");
+        }
+        escreverArquivo.close();
+        System.out.println("Arquivo salvo!");
+    }
+    public static void carregarArquivo(){
 
+    }
 }
