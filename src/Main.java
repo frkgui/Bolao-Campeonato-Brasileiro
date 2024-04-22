@@ -187,10 +187,7 @@ public class Main {
                     String nomeCampeonato = input.nextLine();
                     ArrayList<Time> timesDoCampeonato = carregarArquivo(nomeCampeonato);
                     if(timesDoCampeonato != null){
-                        System.out.println("neste campeonato temos os times: ");
-                        for (int i = 0; i < timesDoCampeonato.size(); i++) {
-                            System.out.println(timesDoCampeonato.get(i).getNomeDoTime());
-                        }
+                        //continue...
                     }
 
                     break;
@@ -408,7 +405,8 @@ public class Main {
                 time.setGolsMarcadosArquivo(Integer.parseInt(coluna[2]));
                 time.setGolsSofridosArquivo(Integer.parseInt(coluna[3]));
                 time.setSaldoDeGols(Integer.parseInt(coluna[4]));
-                time.setMediaDeGols(Double.parseDouble(coluna[4]));
+                time.setNumeroDeVitorias(Integer.parseInt(coluna[5]));
+                time.setMediaDeGols(Double.parseDouble(coluna[6]));
                 listaDeTimesDoCampeonato.add(time);
                 System.out.print("Time "+time.getNomeDoTime()+" adcionado...\n");
             }
