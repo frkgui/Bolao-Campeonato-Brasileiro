@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -182,6 +183,16 @@ public class Main {
                     break;
                 case 3:
                     //carregar dados
+                    System.out.print("Qual é o nome do campeonato: ");
+                    String nomeCampeonato = input.nextLine();
+                    ArrayList<Time> timesDoCampeonato = carregarArquivo(nomeCampeonato);
+                    if(timesDoCampeonato != null){
+                        System.out.println("neste campeonato temos os times: ");
+                        for (int i = 0; i < timesDoCampeonato.size(); i++) {
+                            System.out.println(timesDoCampeonato.get(i).getNomeDoTime());
+                        }
+                    }
+
                     break;
             }
 
@@ -380,7 +391,30 @@ public class Main {
         escreverArquivo.close();
         System.out.println("Arquivo salvo!");
     }
-    public static void carregarArquivo(){
-
+    public static ArrayList<Time> carregarArquivo(String nomeDoCampeonato) throws FileNotFoundException {
+        File file = new File("C:\\Users\\Admin\\IdeaProjects\\Bolao-Campeonato-Brasileiro\\src\\arquivos\\"+nomeDoCampeonato+".csv");
+        ArrayList<Time> listaDeTimesDoCampeonato = new ArrayList<>();
+        if (!file.exists()){
+            System.out.println("Arquivo NÃO encontrado!!");
+            return null;
+        }else {
+            Scanner inputDeDados = new Scanner(file);
+            while (inputDeDados.hasNextLine()){
+                String linhaDoArquivo = inputDeDados.nextLine();
+                String[] coluna = linhaDoArquivo.split(",");
+                Time time = new Time();
+                time.setNomeDoTime(coluna[0]);
+                time.setPontosGanhos(Integer.parseInt(coluna[1]));
+                time.setGolsMarcadosArquivo(Integer.parseInt(coluna[2]));
+                time.setGolsSofridosArquivo(Integer.parseInt(coluna[3]));
+                time.setSaldoDeGols(Integer.parseInt(coluna[4]));
+                time.setMediaDeGols(Double.parseDouble(coluna[4]));
+                listaDeTimesDoCampeonato.add(time);
+                System.out.print("Time "+time.getNomeDoTime()+" adcionado...\n");
+            }
+            return listaDeTimesDoCampeonato;
+        }
     }
+
+
 }

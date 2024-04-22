@@ -50,6 +50,12 @@ public class Time {
     public void setGolsMarcados(Integer golsMarcados) {
         this.golsMarcados += golsMarcados;
     }
+    public void setGolsMarcadosArquivo(Integer golsMarcados) {
+        this.golsMarcados = golsMarcados;
+    }
+    public void setGolsSofridosArquivo(Integer golsSofridos) {
+        this.golsSofridos = golsSofridos;
+    }
 
     public Integer getGolsSofridos() {
         return golsSofridos;
@@ -80,5 +86,13 @@ public class Time {
         this.golsSofridos += golsSofridos;
         this.mediaDeGols = (double) this.golsMarcados /this.golsSofridos;
         this.saldoDeGols = this.golsMarcados - this.golsSofridos;
+    }
+
+    public void setSaldoDeGols(Integer saldoDeGols) {
+        this.saldoDeGols = saldoDeGols;
+    }
+
+    public void setMediaDeGols(double mediaDeGols) {
+        this.mediaDeGols = mediaDeGols;
     }
 }
