@@ -185,10 +185,21 @@ public class Main {
                     //carregar dados
                     System.out.print("Qual é o nome do campeonato: ");
                     String nomeCampeonato = input.nextLine();
-                    ArrayList<Time> timesDoCampeonato = carregarArquivo(nomeCampeonato);
-                    if(timesDoCampeonato != null){
-                        //continue...
+                    campeonato = carregarArquivo(nomeCampeonato);
+                    System.out.println("Este campeonato possui os seguintes dados até o momento: ");
+
+                    System.out.println("|           Time  |    PG |    GM |    GS |     S |     V |  GA |");
+                    for (int i = 0; i < campeonato.getListaDeTimes().size(); i++) {
+
+                        System.out.printf("| %15s | %5d | %5d | %5d | %5d | %5d | %.1f |\n",campeonato.getListaDeTimes().get(i).getNomeDoTime()
+                                ,campeonato.getListaDeTimes().get(i).getPontosGanhos()
+                                ,campeonato.getListaDeTimes().get(i).getGolsMarcados()
+                                ,campeonato.getListaDeTimes().get(i).getGolsSofridos()
+                                ,campeonato.getListaDeTimes().get(i).getSaldoDeGols()
+                                ,campeonato.getListaDeTimes().get(i).getNumeroDeVitorias()
+                                ,campeonato.getListaDeTimes().get(i).getMediaDeGols());
                     }
+
 
                     break;
             }
@@ -376,6 +387,9 @@ public class Main {
         //Criando o arquivo na pasta "arquivos" dentro desse projeto
         File file = new File("C:\\Users\\Admin\\IdeaProjects\\Bolao-Campeonato-Brasileiro\\src\\arquivos\\"+nomeCampeonato+".csv");
         FileWriter escreverArquivo = new FileWriter(file);
+        escreverArquivo.write(nomeCampeonato+"\n");
+        escreverArquivo.write(" \n");
+
         for (int i = 0; i < listaDeTimesClassificados.size(); i++) {
             escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getNomeDoTime()))+",");
             escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getPontosGanhos()))+",");
@@ -385,33 +399,87 @@ public class Main {
             escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getNumeroDeVitorias()))+",");
             escreverArquivo.write((String.valueOf(listaDeTimesClassificados.get(i).getMediaDeGols()))+"\n");
         }
+        escreverArquivo.write(" \n");
+        ArrayList<Partida> listaDePartidasCampeonato = campeonato.getListaDePartidas();
+        for (int i = 0; i < listaDePartidasCampeonato.size(); i++) {
+            escreverArquivo.write(String.valueOf(listaDePartidasCampeonato.get(i).getTimeUm().getNomeDoTime())+",");
+            escreverArquivo.write(String.valueOf(listaDePartidasCampeonato.get(i).getTimeDois().getNomeDoTime())+",");
+            escreverArquivo.write(String.valueOf(listaDePartidasCampeonato.get(i).getPlacarTimeUm())+",");
+            escreverArquivo.write(String.valueOf(listaDePartidasCampeonato.get(i).getPlacarTimeDois())+"\n");
+        }
+
         escreverArquivo.close();
         System.out.println("Arquivo salvo!");
     }
-    public static ArrayList<Time> carregarArquivo(String nomeDoCampeonato) throws FileNotFoundException {
+    public static Campeonato carregarArquivo(String nomeDoCampeonato) throws FileNotFoundException {
+        Campeonato campeonatoDoArquivo = new Campeonato();
         File file = new File("C:\\Users\\Admin\\IdeaProjects\\Bolao-Campeonato-Brasileiro\\src\\arquivos\\"+nomeDoCampeonato+".csv");
         ArrayList<Time> listaDeTimesDoCampeonato = new ArrayList<>();
+        ArrayList<Partida> listaDePartidasDoCampeonato = new ArrayList<>();
         if (!file.exists()){
             System.out.println("Arquivo NÃO encontrado!!");
-            return null;
         }else {
             Scanner inputDeDados = new Scanner(file);
-            while (inputDeDados.hasNextLine()){
+            while (inputDeDados.hasNextLine()) {
                 String linhaDoArquivo = inputDeDados.nextLine();
                 String[] coluna = linhaDoArquivo.split(",");
-                Time time = new Time();
-                time.setNomeDoTime(coluna[0]);
-                time.setPontosGanhos(Integer.parseInt(coluna[1]));
-                time.setGolsMarcadosArquivo(Integer.parseInt(coluna[2]));
-                time.setGolsSofridosArquivo(Integer.parseInt(coluna[3]));
-                time.setSaldoDeGols(Integer.parseInt(coluna[4]));
-                time.setNumeroDeVitorias(Integer.parseInt(coluna[5]));
-                time.setMediaDeGols(Double.parseDouble(coluna[6]));
-                listaDeTimesDoCampeonato.add(time);
-                System.out.print("Time "+time.getNomeDoTime()+" adcionado...\n");
+                if (coluna.length == 1 && !Objects.equals(coluna[0], " ")) {
+                    campeonatoDoArquivo.setNomeDoCampeonato(coluna[0]);
+                    inputDeDados.nextLine();
+                }
+                if (coluna.length == 7) {
+                    Time time = new Time();
+                    time.setNomeDoTime(coluna[0]);
+                    time.setPontosGanhos(Integer.parseInt(coluna[1]));
+                    time.setGolsMarcadosArquivo(Integer.parseInt(coluna[2]));
+                    time.setGolsSofridosArquivo(Integer.parseInt(coluna[3]));
+                    time.setSaldoDeGols(Integer.parseInt(coluna[4]));
+                    time.setNumeroDeVitorias(Integer.parseInt(coluna[5]));
+                    time.setMediaDeGols(Double.parseDouble(coluna[6]));
+                    listaDeTimesDoCampeonato.add(time);
+                    System.out.print("Time " + time.getNomeDoTime() + " adcionado...\n");
+                }
+                if (coluna.length == 4) {
+                    Partida partida = new Partida();
+                    String nomeDoTime1 = coluna[0];
+                    for (int i = 0; i < listaDeTimesDoCampeonato.size(); i++) {
+                        if (Objects.equals(listaDeTimesDoCampeonato.get(i).getNomeDoTime(), nomeDoTime1)) {
+                            Time time1 = new Time();
+                            time1.setNomeDoTime(nomeDoTime1);
+                            time1.setPontosGanhos(listaDeTimesDoCampeonato.get(i).getPontosGanhos());
+                            time1.setGolsMarcadosArquivo(listaDeTimesDoCampeonato.get(i).getGolsMarcados());
+                            time1.setGolsSofridosArquivo(listaDeTimesDoCampeonato.get(i).getGolsSofridos());
+                            time1.setSaldoDeGols(listaDeTimesDoCampeonato.get(i).getSaldoDeGols());
+                            time1.setNumeroDeVitorias(listaDeTimesDoCampeonato.get(i).getNumeroDeVitorias());
+                            time1.setMediaDeGols(listaDeTimesDoCampeonato.get(i).getMediaDeGols());
+                            partida.setTimeUm(time1);
+                        }
+                    }
+                    String nomeTime2 = coluna[1];
+                    for (int i = 0; i < listaDeTimesDoCampeonato.size(); i++) {
+                        if (Objects.equals(listaDeTimesDoCampeonato.get(i).getNomeDoTime(), nomeTime2)) {
+                            Time time2 = new Time();
+                            time2.setNomeDoTime(nomeDoTime1);
+                            time2.setPontosGanhos(listaDeTimesDoCampeonato.get(i).getPontosGanhos());
+                            time2.setGolsMarcadosArquivo(listaDeTimesDoCampeonato.get(i).getGolsMarcados());
+                            time2.setGolsSofridosArquivo(listaDeTimesDoCampeonato.get(i).getGolsSofridos());
+                            time2.setSaldoDeGols(listaDeTimesDoCampeonato.get(i).getSaldoDeGols());
+                            time2.setNumeroDeVitorias(listaDeTimesDoCampeonato.get(i).getNumeroDeVitorias());
+                            time2.setMediaDeGols(listaDeTimesDoCampeonato.get(i).getMediaDeGols());
+                            partida.setTimeDois(time2);
+                        }
+                    }
+                    partida.setPlacarTimeUm(Integer.valueOf(coluna[2]));
+                    partida.setPlacarTimeDois(Integer.valueOf(coluna[3]));
+                    listaDePartidasDoCampeonato.add(partida);
+
+                }
+
             }
-            return listaDeTimesDoCampeonato;
+            campeonatoDoArquivo.setListaDeTimes(listaDeTimesDoCampeonato);
+            campeonatoDoArquivo.setListaDePartidas(listaDePartidasDoCampeonato);
         }
+        return campeonatoDoArquivo;
     }
 
 

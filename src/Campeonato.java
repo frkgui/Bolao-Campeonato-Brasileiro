@@ -5,7 +5,6 @@ public class Campeonato {
     private String nomeDoCampeonato;
     private ArrayList<Time> listaDeTimes = new ArrayList<>();
     private ArrayList<Partida> listaDePartidas = new ArrayList<>();
-    private Integer totalDePartidas = 0;
 
 
     public Campeonato(){
@@ -34,14 +33,6 @@ public class Campeonato {
 
     public void setListaDePartidas(ArrayList<Partida> listaDePartidas) {
         this.listaDePartidas = listaDePartidas;
-    }
-
-    public Integer getTotalDePartidas() {
-        return totalDePartidas;
-    }
-
-    public void setTotalDePartidas(Integer totalDePartidas) {
-        this.totalDePartidas = totalDePartidas;
     }
 
     public String getNomeDoCampeonato() {

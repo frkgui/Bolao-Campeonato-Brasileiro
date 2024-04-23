@@ -1,27 +1,21 @@
 public class Partida {
-    private Integer idPartida = 0;
     private Time timeUm;
     private Time timeDois;
     private Integer placarTimeUm;
     private Integer placarTimeDois;
 
+    public Partida(){
+
+    }
 
     public Partida(Time timeUm, Time timeDois) {
         this.timeUm = timeUm;
         this.timeDois = timeDois;
-        this.idPartida +=1;
         this.placarTimeUm = 0;
         this.placarTimeDois = 0;
 
     }
 
-    public Integer getIdPartida() {
-        return idPartida;
-    }
-
-    public void setIdPartida(Integer idPartida) {
-        this.idPartida = idPartida;
-    }
 
     public Time getTimeUm() {
         return timeUm;
@@ -58,7 +52,6 @@ public class Partida {
     @Override
     public String toString() {
         return "Partida{" +
-                "idPartida=" + idPartida +
                 ", timeUm=" + timeUm +
                 ", timeDois=" + timeDois +
                 ", placarTimeUm=" + placarTimeUm +
