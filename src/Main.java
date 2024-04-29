@@ -19,6 +19,7 @@ public class Main {
 
         // Inicialização do campeonato...
         System.out.println("-- Seja bem vindo ao Simulador & Bolão de Campeonatos! --");
+        System.out.println("-- Feito por Carlos Bernardo e Guilherme Frank --");
 
         // Menu principal
         do{
