@@ -61,10 +61,6 @@ public class Time {
         return golsSofridos;
     }
 
-    public void setGolsSofridos(Integer golsSofridos) {
-        this.golsSofridos += golsSofridos;
-    }
-
     public Integer getSaldoDeGols() {
         return saldoDeGols;
     }

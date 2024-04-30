@@ -8,24 +8,8 @@ public class Resultado {
 
     public Resultado() {}
 
-    public Time getTimeVencedor() {
-        return timeVencedor;
-    }
-
-    public void setTimeVencedor(Time timeVencedor) {
-        this.timeVencedor = timeVencedor;
-    }
-
     public ArrayList<Bolao> getListaDeBoloes() {
         return listaDeBoloes;
-    }
-
-    public String getNomesDosBoloes(int index){
-        return "Bolao de " + listaDeBoloes.get(index).getNomeDoApostador();
-    }
-
-    public void setListaDeBoloes(ArrayList<Bolao> listaDeBoloes) {
-        this.listaDeBoloes = listaDeBoloes;
     }
 
     public Bolao getBolaoVencedor() {
