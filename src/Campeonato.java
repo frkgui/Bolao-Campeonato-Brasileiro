@@ -6,13 +6,8 @@ public class Campeonato {
     private ArrayList<Time> listaDeTimes = new ArrayList<>();
     private ArrayList<Partida> listaDePartidas = new ArrayList<>();
 
-
     public Campeonato(){
 
-    }
-
-    public Campeonato(String nomeDoCampeonato) {
-      this.nomeDoCampeonato = nomeDoCampeonato;
     }
 
     public void setNomeDoCampeonato(String nomeDoCampeonato) {
@@ -39,13 +34,6 @@ public class Campeonato {
         return nomeDoCampeonato;
     }
 
-    public void adicionarPartida(Partida partida){
-
-    }
-
-    public void iniciarRodada(ArrayList<Partida> listaDePartidas){
-
-    }
 
     public void adicionarTime(Time time){
         this.listaDeTimes.add(time);
